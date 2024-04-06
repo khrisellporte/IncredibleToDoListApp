@@ -3,50 +3,37 @@
  *
  * @format
  */
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ToDoList from './src/components/ToDoList';
+import ToDoForm from './src/components/ToDoForm';
+import HomeScreen from './src/screens/HomeScreen'; // Importing HomeScreen
+import AboutScreen from './src/screens/AboutScreen'; // Importing AboutScreen
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet
-
-} from 'react-native';
-import ToDoList from './components/ToDoList';
-import ToDoList from './components/ToDoForm';
+const Stack = createNativeStackNavigator();
 
 function App() {
+  const [tasks, setTasks] = useState([
+    'Do laundry',
+    'Go to gym',
+    'Walk dog'
+  ]);
+
+  const handleAddTask = (task) => {
+    setTasks([...tasks, task]);
+  };
+
   return (
-    <SafeAreaView>
-     <ToDoList />
-      <ToDoForm />
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="About" component={AboutScreen} />
+        <Stack.Screen name="ToDoList" component={ToDoList} initialParams={{ tasks }} />
+        <Stack.Screen name="ToDoForm" component={ToDoForm} initialParams={{ addTask: handleAddTask }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-const styles = StyleSheet.create({
-  task: {
-      padding: 10,
-      borderBottomWidth: 1,
-      borderColor: '#ccc',
-  },
-  completed: {
-      backgroundColor: '#e0e0e0',
-  },
-  taskText: {
-      fontSize: 16,
-  },
-  form: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginHorizontal: 20,
-      marginTop: 20,
-  },
-  input: {
-      flex: 1,
-      borderWidth: 1,
-      borderColor: '#ccc',
-      paddingHorizontal: 10,
-      paddingVertical: 5,
-      marginRight: 10,
-  },
-});
+
 export default App;
